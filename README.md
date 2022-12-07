@@ -1,5 +1,5 @@
-# WK2022Challange
-Challange WK 2022
+# WK2022Challenge
+Challenge WK 2022
 
 WkAppAndroid is DIR for the android version of the app
 

@@ -9,6 +9,10 @@ WkAPI is DIR for the API
 
 WkDataBase is DIR for the DataBase 
 
+To start app first open cmd and install make sure your in the correct Dir : npm Install
+
+Then to Run the file Type in your cmd : npm start
+
 Install React native/Expo : https://archive.reactnative.dev/docs/getting-started
 
 Install Async Lib : https://react-native-async-storage.github.io/async-storage/docs/install

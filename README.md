@@ -5,9 +5,9 @@ WkAppAndroid is DIR for the android version of the app
 
 WkAppIOS is DIR for the IOS version of the app (NOT PRIORITY)
 
-WkAPI is DIR for the API 
+~~WkAPI is DIR for the API~~ 
 
-WkDataBase is DIR for the DataBase 
+~~WkDataBase is DIR for the DataBase~~
 
 To start app first open cmd and install make sure your in the correct Dir : npm Install
 

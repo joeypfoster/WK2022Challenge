@@ -2,13 +2,14 @@ import { StyleSheet} from 'react-native';
 import React, {useEffect} from "react";
 import { NavigationContainer } from '@react-navigation/native';
 import {createNativeStackNavigator} from "@react-navigation/native-stack";
-import Home from "./Home";
 import Search from "./Search";
 import Info from "./Info";
 import { loadapi } from './LoadApi';
-  
+
 const Stack = createNativeStackNavigator();
 const loadAPI = loadapi();
+
+import Home from "./Home";
 
   export default function App({navigation}) {
     let startscreen = 'Home';

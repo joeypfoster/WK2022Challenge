@@ -4,13 +4,13 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 
 export function loadapi() {
     var request = new XMLHttpRequest();
-    const test = () => {
+    const teams = () => {
         // console.log(n);
         request.onreadystatechange = (e) => {
             if (request.readyState !== 4) return;
             if (request.status === 200) {
-                var data = JSON.parse(request.responseText).groups;
-                AsyncStorage.setItem("data", JSON.stringify(data));
+                var data = JSON.parse(request.responseText).group;
+                AsyncStorage.setItem("teams", JSON.stringify(data));
             } else {
                 console.warn('error');
             }
@@ -18,6 +18,22 @@ export function loadapi() {
     }
     request.open('GET', 'https://worldcupjson.net/teams');
     request.send();  
-    test();
-    
+    teams();
+
+    var request = new XMLHttpRequest();
+    const matches = () => {
+        // console.log(n);
+        request.onreadystatechange = (e) => {
+            if (request.readyState !== 4) return;
+            if (request.status === 200) {
+                var data = JSON.parse(request.responseText);
+                AsyncStorage.setItem("matches", JSON.stringify(data));
+            } else {
+                console.warn('error');
+            }
+        };  
+    }
+    request.open('GET', 'https://worldcupjson.net/matches');
+    request.send();  
+    matches();
 }

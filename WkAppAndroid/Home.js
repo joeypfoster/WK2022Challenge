@@ -6,8 +6,13 @@ import React, {useEffect} from "react";
 const Home = ({navigation}) => {
 
   useEffect(() => {
-    AsyncStorage.getItem('data', (err, result) => {
+    AsyncStorage.getItem('teams', (err, result) => {
       const r = JSON.parse(result);
+      console.log(r)
+    });
+    AsyncStorage.getItem('matches', (err, result) => {
+      const r = JSON.parse(result);
+      console.log(r)
     });
 
   });

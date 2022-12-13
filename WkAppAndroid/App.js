@@ -1,12 +1,28 @@
-import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View } from 'react-native';
+import { StyleSheet} from 'react-native';
+import React, {useEffect} from "react";
+import { NavigationContainer } from '@react-navigation/native';
+import {createNativeStackNavigator} from "@react-navigation/native-stack";
+import Home from "./Home";
+import Search from "./Search";
+import Info from "./Info";
+import { loadapi } from './LoadApi';
+  
+const Stack = createNativeStackNavigator();
+const loadAPI = loadapi();
 
-export default function App() {
+  export default function App({navigation}) {
+    let startscreen = 'Home';
+    // console.disableYellowBox = true;
+    loadAPI;
+
   return (
-    <View style={styles.container}>
-      <Text>Open up App.js to start working on your app!</Text>
-      <StatusBar style="auto" />
-    </View>
+    <NavigationContainer>
+        <Stack.Navigator initialRouteName={startscreen} >
+          <Stack.Screen name="Home" component={Home}/>
+          <Stack.Screen name="Search" component={Search}/>
+          <Stack.Screen name="Info" component={Info}/>
+        </Stack.Navigator>
+      </NavigationContainer>
   );
 }
 

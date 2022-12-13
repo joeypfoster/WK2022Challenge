@@ -1,7 +1,17 @@
 import { StatusBar } from 'expo-status-bar';
 import { StyleSheet, Text, View } from 'react-native';
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import React, {useEffect} from "react";
 
-export default function App() {
+const Home = ({navigation}) => {
+
+  useEffect(() => {
+    AsyncStorage.getItem('data', (err, result) => {
+      const r = JSON.parse(result);
+    });
+
+  });
+
   return (
     <View style={styles.container}>
       <Text>Open up App.js to start working on your app!</Text>
@@ -18,3 +28,5 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
 });
+
+export default Home;

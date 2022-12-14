@@ -4,22 +4,29 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 
 export function loadapi() {
 	
+	let types = ["teams", "matches"];
+	for (let i = 0; i < types.length; i++) {
+		setTimeout(() => {
+			let value = types[i];
+			let request = new XMLHttpRequest();
+		
+			request.onreadystatechange = (e) => {
+				if (request.readyState !== 4) return
+		
+				if (request.status !== 200) {
+					console.warn('error');
+					return
+				}
+				console.log(`Getting JSON for ${value}`)
+				let data = JSON.parse(request.responseText);
+				AsyncStorage.setItem(value, JSON.stringify(data));
+			};  
+			request.open('GET', 'https://worldcupjson.net/' + value);
+			request.send();  
+		}, i * 100)
+	}
+
 	for (var value of ["teams", "matches"]) {
-		var request = new XMLHttpRequest();
-
-		request.onreadystatechange = (e) => {
-			if (request.readyState !== 4) return
-
-			if (request.status !== 200) {
-				console.warn('error');
-				return
-			}
-			
-			var data = JSON.parse(request.responseText);
-			AsyncStorage.setItem(value, JSON.stringify(data));
-		};  
-		request.open('GET', 'https://worldcupjson.net/' + value);
-		request.send();  
 	}
 	
 

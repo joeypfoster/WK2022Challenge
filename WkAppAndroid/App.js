@@ -9,9 +9,26 @@ import { loadapi } from './LoadApi';
 const Stack = createNativeStackNavigator();
 const loadAPI = loadapi();
 
+log = {}
+log.color = (text, color) => {
+	let c = text.split("]")
+	if (c.length < 2) return console.log(text)
+	switch(color) {
+		case "red":
+			console.log(`\x1b[31m${c[0]}]\x1b[0m${c[1]}`)
+			break;
+		case "green":
+			console.log(`\x1b[32m${c[0]}]\x1b[0m${c[1]}`)
+			break;
+		case "yellow":
+			console.log(`\x1b[33m${c[0]}]\x1b[0m${c[1]}`)
+			break;
+	}
+}
+
 import Home from "./Home";
 
-  export default function App({navigation}) {
+export default function App({navigation}) {
     let startscreen = 'Home';
     // console.disableYellowBox = true;
     loadAPI;

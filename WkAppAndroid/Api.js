@@ -41,14 +41,50 @@ let WK = class {
 		return new Promise((resolve, reject) => {
 			AsyncStorage.getItem('matches', (err, result) => {
 				const matches = JSON.parse(result);
-				if (!teamName) {
-					resolve(matches);
-				}
+
+				if (!teamName) resolve(matches)
+
 				let teamMatches = []
 				matches.forEach((match) => {
 					if (match.home_team.name === teamName || match.away_team.name === teamName) teamMatches.push(match)
 				})
 				resolve(teamMatches);
+			})
+		})
+	}
+
+	GetMatch(matchId) {
+		return new Promise((resolve, reject) => {
+			AsyncStorage.getItem('matches', (err, result) => {
+				const matches = JSON.parse(result);
+
+				matches.forEach(match => {
+					if (match.id === matchId) resolve([match])
+				})
+			})
+		})
+	}
+
+	searchMatch(searchTerm) {
+		// find a match using a search term with wildcards
+
+		return new Promise((resolve, reject) => {
+			AsyncStorage.getItem('matches', (err, result) => {
+				const matches = JSON.parse(result);
+
+				let searchMatches = []
+
+				matches.forEach(match => {
+					// filter out bad characters
+					searchTerm = searchTerm.replace(/[^a-zA-Z ]/g, "")
+					
+					// do a regex check for the first few characters of the search term
+					// if (match.home_team.name.match(new RegExp(`^${searchTerm}`, "g")) || match.away_team.name.match(new RegExp(`^${searchTerm}`, "g"))) searchMatches.push(match)
+					// Do a regex check to find the match where it does not contain the search term
+					if (!match.home_team.name.match(new RegExp(`^${searchTerm}`, "g")) && !match.away_team.name.match(new RegExp(`^${searchTerm}`, "g"))) searchMatches.push(match)
+				})
+
+				resolve(searchMatches)
 			})
 		})
 	}

@@ -1,5 +1,5 @@
 import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View, SafeAreaView, ScrollView, Image, Dimensions, TouchableOpacity, Button, BackHandler } from 'react-native';
+import { StyleSheet, Text, View, SafeAreaView, ScrollView, Image, Dimensions, TouchableOpacity, Button, BackHandler, navigation } from 'react-native';
 import React, {useEffect, useState, setNativeProps} from "react";
 import Display from 'react-native-display';
 import { SearchBar } from 'react-native-elements';
@@ -27,11 +27,6 @@ const Search = ({navigation}) => {
 		} else blockedIDs = []
 	};
 
-	var checkID = function(id) {
-		return !blockedIDs.includes(id)
-	}
-
-
 	const selectedTeam = "";
 
 	useEffect(() => {
@@ -39,49 +34,58 @@ const Search = ({navigation}) => {
 		api.getTeams(selectedTeam).then((team) => setTeams(team))
 	}, []);
 
+	// Redirect to Info page with match id
 	let showMatch = (id) => {
-		console.log('Showing match: ' + currentMatch)
-		currentMatch = id
-		navigation.replace("Info");
+		console.log('Showing match: ' + id)
+		navigation.replace("Info", { id: id });
+	}
+
+	let imageLink = (team) => {
+		let baseUrl = 'https://cdn.countryflags.com/thumbs/'
+
+		if (team == 'United States') {
+			return `${baseUrl}united-states-of-america/flag-400.png`
+		} else {
+			return `${baseUrl}${team.toLowerCase().replace('korea republic', 'south-korea').replace(' ', '-')}/flag-400.png`
+		}
 	}
 
 	let returnMatches = () => {
-		  let baseUrl = 'https://cdn.countryflags.com/thumbs/'
 		  if (matches.length) {
 			  return (
 				matches.map((item, index) => (
 					<View key={index}>
-						<Display enable={checkID(item.id)}>
+						{/* Check if our id is in the block list then hide it */}
+						<Display enable={!blockedIDs.includes(item.id)}>
 							<TouchableOpacity onPress={() => showMatch(item.id)}>
 								<Text style={styles.match}>{item.home_team.name}: {item.home_team.goals} - {item.away_team.goals} {item.away_team.name}</Text>
+								
 								<View style={styles.containerFlags}>
-
-								<Image style={styles.flag} source={{ uri: item.home_team.name !== 'United States' ? `${baseUrl}${item.home_team.name.toLowerCase().replace('korea republic', 'south-korea').replace(' ', '-')}/flag-400.png` : baseUrl + 'united-states-of-america/flag-400.png' }}/>
-								<Image style={styles.flag} source={{ uri: item.away_team.name !== 'United States' ? `${baseUrl}${item.away_team.name.toLowerCase().replace('korea republic', 'south-korea').replace(' ', '-')}/flag-400.png` : baseUrl + 'united-states-of-america/flag-400.png' }}/>
-								</View>
+									<Image style={styles.flag} source={{ uri: imageLink(item.home_team.name)}}/>
+									<Image style={styles.flag} source={{ uri: imageLink(item.away_team.name)}}/>
+								</View>					
 							</TouchableOpacity>
 						</Display>
 					  </View>
 				  ))
 			  )
 		  }
-		//   else return ( <View style={styles.error}><Text>Error in returnMatches()</Text></View> )
+		// else return ( <View style={styles.error}><Text>Error in returnMatches()</Text></View> )
 	}
 
-
 	return (
-		  <SafeAreaView  style={styles.container}>
-		  <ScrollView>
-			<SearchBar style={styles.search}
-			  placeholder="Type Here..."
-			  onChangeText={(e) => updateSearch(e)}
-			  value={searchString}
-			/>
-			<View style={styles.container}>
-			  <Text>{returnMatches()}</Text>
-			</View>
-			<StatusBar style="auto" />
-		  </ScrollView>
+		<SafeAreaView style={styles.container}>
+			<ScrollView>
+				<SearchBar style={styles.search}
+					placeholder="Find match..."
+					onChangeText={(e) => updateSearch(e)}
+					value={searchString}
+				/>
+				<View style={styles.container}>
+					<Text>{returnMatches()}</Text>
+				</View>
+				<StatusBar style="auto" />
+			</ScrollView>
 		</SafeAreaView >
 	);
 }

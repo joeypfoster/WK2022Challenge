@@ -5,19 +5,24 @@ import React, {useEffect, useState, setNativeProps} from "react"
 const WK = require('./Api')
 const api = new WK();
 
-const Info = ({navigation}) => {
-	function handleBackButtonClick() {
+const Info = ({ route, navigation}) => {
+	
+	function backClick() {
 		navigation.replace("Search")
 		return true;
 	}
 	
 	const [info, setInfo] = useState([]);
-
-
+	
 	useEffect(() => {
-		api.GetMatch(currentMatch).then((id) => setInfo(id))
-		BackHandler.addEventListener("hardwareBackPress", handleBackButtonClick);
-		return () => BackHandler.removeEventListener("hardwareBackPress", handleBackButtonClick)
+
+		// Get the match id from the route params
+		const { id } = route.params;
+		api.GetMatch(id).then((id) => setInfo(id))
+
+		// Add event listener for hardware back button
+		BackHandler.addEventListener("hardwareBackPress", backClick);
+		return () => BackHandler.removeEventListener("hardwareBackPress", backClick)
 	}, []);
 
 	let returnInfo = () => {

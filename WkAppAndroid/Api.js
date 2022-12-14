@@ -41,13 +41,13 @@ let WK = class {
 		return new Promise((resolve, reject) => {
 			AsyncStorage.getItem('matches', (err, result) => {
 				const matches = JSON.parse(result);
-
+				if (!teamName) {
+					resolve(matches);
+				}
 				let teamMatches = []
-				
 				matches.forEach((match) => {
 					if (match.home_team.name === teamName || match.away_team.name === teamName) teamMatches.push(match)
 				})
-
 				resolve(teamMatches);
 			})
 		})

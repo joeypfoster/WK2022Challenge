@@ -21,32 +21,7 @@ const Home = ({navigation}) => {
     // });d
   //});
 
-  const [matches, setMatches] = useState([]);
-  const [teams, setTeams] = useState([]);
 
-  const selectedTeam = "Netherlands";
-
-  useEffect(() => {
-	api.getMatches(selectedTeam).then((match) => setMatches(match))
-	api.getTeams(selectedTeam).then((team) => setTeams(team))
-  }, []);
-
-  
-  let returnMatches = () => {
-	  if (matches.length) {
-		  return (
-			matches.map((item, index) => (
-				  <View key={index}>
-					  <Text>ID: {item.attendance}</Text>
-					  <Text>Venue: {item.venue}</Text>
-					  <Text>Location: {item.location}</Text>
-					  <Text>Status: {item.status}</Text>
-				  </View>
-			  ))
-		  )
-	  }
-	  else return ( <View style={styles.error}><Text>Error in returnMatches()</Text></View> )
-  }
 
   let returnTeams = () => {
 	  if (teams.length) {
@@ -62,7 +37,7 @@ const Home = ({navigation}) => {
 					<Text>goals_against: {item.goals_against}</Text>
 					<Text>goals_for: {item.goals_for}</Text>
 					<Text>group_points: {item.group_points}</Text>
-					<Text>losses: {item.losses}</Text>
+		 			<Text>losses: {item.losses}</Text>
 					<Text>wins: {item.wins}</Text>
 				</View>
 			))

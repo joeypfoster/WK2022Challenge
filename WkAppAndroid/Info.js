@@ -5,10 +5,13 @@ import React, {useEffect, useState, setNativeProps} from "react"
 const WK = require('./Api')
 const api = new WK();
 
+var sLocation = 0;
+
 const Info = ({ route, navigation}) => {
 	
 	function backClick() {
-		navigation.replace("Search")
+		console.log(sLocation)
+		navigation.replace("Search", { scrollLocation: sLocation })
 		return true;
 	}
 	
@@ -17,8 +20,9 @@ const Info = ({ route, navigation}) => {
 	useEffect(() => {
 
 		// Get the match id from the route params
-		const { id } = route.params;
+		const { id, scrollLocation } = route.params;
 		api.GetMatch(id).then((id) => setInfo(id))
+		sLocation = scrollLocation
 
 		// Add event listener for hardware back button
 		BackHandler.addEventListener("hardwareBackPress", backClick);

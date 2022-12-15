@@ -1,5 +1,5 @@
 import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View, SafeAreaView, ScrollView, Image, Dimensions, TouchableOpacity, Button, BackHandler, navigation } from 'react-native';
+import { StyleSheet, Text, View, SafeAreaView, ScrollView, Image, Dimensions, TouchableOpacity, Button, BackHandler, navigation} from 'react-native';
 import React, {useEffect, useState, setNativeProps} from "react";
 import Display from 'react-native-display';
 import { SearchBar } from 'react-native-elements';
@@ -8,12 +8,16 @@ const WK = require('./Api')
 const api = new WK();
 
 var blockedIDs = []
+var scrollLocation = 0
 
-const Search = ({navigation}) => {
+const Search = ({route, navigation}) => {
 
 	const [searchString, setSearch] = useState('');
 	const [matches, setMatches] = useState([]);
 	const [teams, setTeams] = useState([]);
+	const [ref, setRef] = useState(0);
+	
+	// const aref = useAnimatedRef();
 
 	let updateSearch = (search) => {
 		setSearch({ search });
@@ -30,9 +34,28 @@ const Search = ({navigation}) => {
 	const selectedTeam = "";
 
 	useEffect(() => {
+		scrollParam = route.param;
+
 		api.getMatches(selectedTeam).then((match) => setMatches(match))
 		api.getTeams(selectedTeam).then((team) => setTeams(team))
 	}, []);
+
+
+	//  console.log(scrollLocation)
+	if (scrollLocation && scrollLocation > 0) {
+		console.log('Scrolling to: ' + scrollLocation)
+
+		// Q: How do I scroll to a specific location?
+		// A: https://stackoverflow.com/questions/37096367/how-to-scroll-to-a-specific-position-in-react-native
+
+		// scrollTo({ x: 0, y: 1000, animated: true })
+		// aref.scrollTo({
+		// 	x: 0,
+		// 	y: scrollLocation,
+		// 	animated: true,
+		//   });
+		// aref.current.scrollTo({ x, scrollLocation, animated: true });
+	}
 
 	// Redirect to Info page with match id
 	let showMatch = (id) => {
@@ -48,6 +71,10 @@ const Search = ({navigation}) => {
 		} else {
 			return `${baseUrl}${team.toLowerCase().replace('korea republic', 'south-korea').replace(' ', '-')}/flag-400.png`
 		}
+	}
+
+	let handleScroll = (event) => {
+		scrollLocation = event.nativeEvent.contentOffset.y;
 	}
 
 	let returnMatches = () => {
@@ -75,7 +102,7 @@ const Search = ({navigation}) => {
 
 	return (
 		<SafeAreaView style={styles.container}>
-			<ScrollView>
+			<ScrollView onScroll={(e) => handleScroll(e)} ref={(ref) => {setRef(ref)} }>
 				<SearchBar style={styles.search}
 					placeholder="Find match..."
 					onChangeText={(e) => updateSearch(e)}

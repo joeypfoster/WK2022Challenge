@@ -29,7 +29,7 @@ log.color = (text, color) => {
 import Home from "./Home";
 
 export default function App({navigation}) {
-    let startscreen = 'Home';
+    let startscreen = 'Search';
     // console.disableYellowBox = true;
     loadAPI;
 

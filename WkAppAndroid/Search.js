@@ -4,7 +4,6 @@ import React, {useEffect, useState, setNativeProps, useRef} from "react";
 import Display from 'react-native-display';
 import { SearchBar } from 'react-native-elements';
 
-
 const WK = require('./Api')
 const api = new WK();
 
@@ -71,15 +70,28 @@ const Search = ({route, navigation}) => {
 		scrollLocation = event.nativeEvent.contentOffset.y;
 	}
 
+	let colorText = (team, opponent) => {
+		if (team.goals > opponent.goals) {
+			return {color: 'green'}
+		} else if (team.goals < opponent.goals) {
+			return {color: 'red'}
+		} 
+		return {color: 'orange'}
+	}
+
 	let returnMatches = () => {
 		  if (matches.length) {
 			  return (
 				matches.map((item, index) => (
 					<View key={index}>
 						{/* Check if our id is in the block list then hide it */}
-						<Display enable={!blockedIDs.includes(item.id)}>
+						<Display enable={!blockedIDs.includes(item.id)} style={styles.matches}>
 							<TouchableOpacity onPress={() => showMatch(item.id)}>
-								<Text style={styles.match}>{item.home_team.name}: {item.home_team.goals} - {item.away_team.goals} {item.away_team.name}</Text>
+								<Text style={styles.match}>
+								<Text style={colorText(item.home_team, item.away_team)}>{item.home_team.name}: {item.home_team.goals}</Text>
+									<Text style={{color: 'black'}}> - </Text>
+									<Text style={colorText(item.away_team, item.home_team)}>{item.away_team.name}: {item.away_team.goals}</Text>
+								</Text>
 								
 								<View style={styles.containerFlags}>
 									<Image style={styles.flag} source={{ uri: imageLink(item.home_team.name)}}/>
@@ -135,15 +147,28 @@ const styles = StyleSheet.create({
 		flexDirection: 'row',
 		justifyContent: 'center',
 		alignItems: 'center',
-		margin: 10,
-		padding: 10,
-		borderWidth: 1,
-		borderRadius: 5,
-		borderColor: '#DC143C',
+		textAlign: 'center',
+		// margin: 0,
+		// marginTop: 20,
+		padding: 0,
+		// borderWidth: 1,
+		// borderRadius: 5,
+		// borderColor: '#DC143C',
 		backgroundColor: '#fff',
 		color: '#DC143C',
 		fontWeight: 'bold',
 		fontSize: 20,
+	},
+	matches: {
+		marginTop: 20,
+		flex: 1,
+		flexDirection: 'row',
+		justifyContent: 'center',
+		alignItems: 'center',
+		textAlign: 'center',
+		borderWidth: 3,
+		BorderColor: '#DC143C',
+		borderRadius: 5,
 	},
 	flag: {
 		width: 400 / 6,
@@ -160,11 +185,12 @@ const styles = StyleSheet.create({
 		backgroundColor: '#fff',
 	},
 	containerFlags: {
+		marginTop: 5,
 		// flex: 1,
 		flexDirection: 'row',
-		margin: 10,
-		padding: 10,
-		borderWidth: 1,
+		// margin: 0,
+		padding: 0,
+		// borderWidth: 1,
 		width: (Dimensions.get('window').width ) * 0.75,
 	},
 	DontShow: {

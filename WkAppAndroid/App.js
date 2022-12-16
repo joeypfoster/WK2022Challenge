@@ -11,7 +11,7 @@ const loadAPI = loadapi();
 
 import Home from "./Home";
 
-  export default function App({navigation}) {
+export default function App({navigation}) {
     let startscreen = 'Search';
     // console.disableYellowBox = true;
     loadAPI;

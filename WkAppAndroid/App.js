@@ -14,11 +14,14 @@ log.color = (text, color) => {
 	let c = text.split("]")
 	if (c.length < 2) return console.log(text)
 	switch(color) {
-		case "red": console.log(`\x1b[31m${c[0]}]\x1b[0m${c[1]}`)
+		case "red":
+			console.log(`\x1b[31m${c[0]}]\x1b[0m${c[1]}`)
 			break;
-		case "green": console.log(`\x1b[32m${c[0]}]\x1b[0m${c[1]}`)
+		case "green":
+			console.log(`\x1b[32m${c[0]}]\x1b[0m${c[1]}`)
 			break;
-		case "yellow": console.log(`\x1b[33m${c[0]}]\x1b[0m${c[1]}`)
+		case "yellow":
+			console.log(`\x1b[33m${c[0]}]\x1b[0m${c[1]}`)
 			break;
 	}
 }
@@ -26,7 +29,7 @@ log.color = (text, color) => {
 import Home from "./Home";
 
 export default function App({navigation}) {
-    let startscreen = 'Search';
+    let startscreen = 'Home';
     // console.disableYellowBox = true;
     loadAPI;
 

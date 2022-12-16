@@ -1,30 +1,32 @@
 import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View, SafeAreaView, ScrollView, Image, Dimensions, TouchableOpacity, Button, BackHandler, navigation} from 'react-native';
-import React, {useEffect, useState, setNativeProps} from "react";
+import { StyleSheet, Text, View, SafeAreaView, ScrollView, Image, Dimensions, TouchableOpacity, Button, BackHandler, navigation, Platform} from 'react-native';
+import React, {useEffect, useState, setNativeProps, useRef} from "react";
 import Display from 'react-native-display';
 import { SearchBar } from 'react-native-elements';
+
 
 const WK = require('./Api')
 const api = new WK();
 
 var blockedIDs = []
 var scrollLocation = 0
+// const scrollTo = useScrollTo();
 
 const Search = ({route, navigation}) => {
 
 	const [searchString, setSearch] = useState('');
 	const [matches, setMatches] = useState([]);
 	const [teams, setTeams] = useState([]);
-	const [ref, setRef] = useState(0);
-	
-	// const aref = useAnimatedRef();
+	// const [ref, setRef] = useState(0);
+	const scrollViewRef = useRef(null);
 
 	let updateSearch = (search) => {
 		setSearch({ search });
 
 		console.log('Searching for: ' + search)
 		
-		if (search.length > 0) {
+		
+		if (search.length > 0 && search != "") {
 			api.searchMatch(search).then((match) => {
 				match.forEach((item, index) => blockedIDs.push(item.id))
 			})
@@ -35,7 +37,7 @@ const Search = ({route, navigation}) => {
 
 	useEffect(() => {
 		scrollParam = route.param;
-
+		
 		api.getMatches(selectedTeam).then((match) => setMatches(match))
 		api.getTeams(selectedTeam).then((team) => setTeams(team))
 	}, []);
@@ -43,19 +45,11 @@ const Search = ({route, navigation}) => {
 
 	//  console.log(scrollLocation)
 	if (scrollLocation && scrollLocation > 0) {
-		console.log('Scrolling to: ' + scrollLocation)
+		console.log('Scrolling to: ' + Math.floor(scrollLocation))
 
-		// Q: How do I scroll to a specific location?
-		// A: https://stackoverflow.com/questions/37096367/how-to-scroll-to-a-specific-position-in-react-native
-
-		// scrollTo({ x: 0, y: 1000, animated: true })
-		// aref.scrollTo({
-		// 	x: 0,
-		// 	y: scrollLocation,
-		// 	animated: true,
-		//   });
-		// aref.current.scrollTo({ x, scrollLocation, animated: true });
+		scrollViewRef.current?.scrollTo({y: scrollLocation}); 
 	}
+
 
 	// Redirect to Info page with match id
 	let showMatch = (id) => {
@@ -99,10 +93,10 @@ const Search = ({route, navigation}) => {
 		  }
 		// else return ( <View style={styles.error}><Text>Error in returnMatches()</Text></View> )
 	}
-
+	
 	return (
 		<SafeAreaView style={styles.container}>
-			<ScrollView onScroll={(e) => handleScroll(e)} ref={(ref) => {setRef(ref)} }>
+			<ScrollView onScroll={(e) => handleScroll(e)} ref={scrollViewRef}>
 				<SearchBar style={styles.search}
 					placeholder="Find match..."
 					onChangeText={(e) => updateSearch(e)}

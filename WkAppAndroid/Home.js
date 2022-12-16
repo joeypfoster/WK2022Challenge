@@ -1,75 +1,111 @@
-import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View } from 'react-native';
-import React, {useEffect, useState} from "react";
-// import AsyncStorage from "@react-native-async-storage/async-storage";
-
-const WK = require('./Api')
-const api = new WK();
 
 
+import React, { Component } from 'react';
+import {
+  Dimensions,
+  Platform,
+  ScrollView,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View
+} from 'react-native';
 
-const Home = ({navigation}) => {
+let scrollYPos = 0;
 
-  //useEffect(() => {
-    // AsyncStorage.getItem('teams', (err, result) => {
-    //   const r = JSON.parse(result);
-    //   console.log(r)
-    // });
-    // AsyncStorage.getItem('matches', (err, result) => {
-    //   const r = JSON.parse(result);
-    //   console.log(r)
-    // });d
-  //});
+export default class App extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      screenHeight: Dimensions.get('window').height,      
+      screenWidth: Dimensions.get('window').width,
+    };
+  }
 
+  scrollToB = () => {
+    scrollYPos = this.state.screenHeight * 1;
+    this.scroller.scrollTo({x: 0, y: scrollYPos});
+  };
+  scrollToC = () => {
+    scrollYPos = this.state.screenHeight * 2;
+    this.scroller.scrollTo({x: 0, y: scrollYPos});
+  };
+  scrollToTop = () => {
+    this.scroller.scrollTo({x: 0, y: 0});
+  };
 
-
-  let returnTeams = () => {
-	  if (teams.length) {
-		return (
-			teams.map((item, index) => (
-				<View key={index}>
-					<Text>name: {item.name}</Text>
-					<Text>country: {item.country}</Text>
-					<Text>group_letter: {item.group_letter}</Text>
-					<Text>draws: {item.draws}</Text>
-					<Text>games_played: {item.games_played}</Text>
-					<Text>goal_differential: {item.goal_differential}</Text>
-					<Text>goals_against: {item.goals_against}</Text>
-					<Text>goals_for: {item.goals_for}</Text>
-					<Text>group_points: {item.group_points}</Text>
-		 			<Text>losses: {item.losses}</Text>
-					<Text>wins: {item.wins}</Text>
-				</View>
-			))
-		)
-	}
-	else return ( <View style={styles.error}><Text>Error in returnTeams()</Text></View> )
-}
-
-
-  return (
-	  <View style={styles.container}>
-		  <Text>{returnMatches()}</Text>
-		  <Text>--------------------------</Text>
-		  <Text>{returnTeams()}</Text>
-		<StatusBar style="auto" />
-	  </View>
-	);
+  render() {
+    return (
+      <ScrollView style={styles.container} ref={(scroller) => {this.scroller = scroller}}>
+        <View style={[styles.screen, styles.screenA]}>
+          <Text style={styles.letter}>A</Text>
+          <TouchableOpacity
+            onPress={this.scrollToB}
+          >
+            <View style={styles.scrollButton}>
+              <Text style={styles.scrollButtonText}>Scroll to B</Text>
+            </View>
+          </TouchableOpacity>
+        </View>
+        <View style={[styles.screen, styles.screenB]}>
+          <Text style={styles.letter}>B</Text>
+          <TouchableOpacity
+            onPress={this.scrollToC}
+          >
+            <View style={styles.scrollButton}>
+              <Text style={styles.scrollButtonText}>Scroll to C</Text>
+            </View>
+          </TouchableOpacity>
+        </View>
+        <View style={[styles.screen, styles.screenC]}>
+          <Text style={styles.letter}>C</Text>
+          <TouchableOpacity
+            onPress={this.scrollToTop}
+          >
+            <View style={styles.scrollButton}>
+              <Text style={styles.scrollButtonText}>Scroll to Top</Text>
+            </View>
+          </TouchableOpacity>
+        </View>
+      </ScrollView>
+    );
+  }
 }
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
   },
-  error: {
-    flex: 1,
-    backgroundColor: '#DC143C',
-    alignItems: 'center',
-    justifyContent: 'center',
+  screen: {
+    backgroundColor: 'yellow',
+    flexDirection: 'column', 
+    height: Dimensions.get('window').height,
+    justifyContent: 'center'
+  },
+  screenA: {
+    backgroundColor: '#F7CAC9',
+  },
+  screenB: {
+    backgroundColor: '#92A8D1',
+  },
+  screenC: {
+    backgroundColor: '#88B04B',
+  },
+  letter: {
+    color: '#000',
+    fontSize: 60,
+    textAlign: 'center'
+  },
+  scrollButton: {
+    alignSelf: 'center',
+    backgroundColor: 'white',
+    height: 50,
+    marginTop: 50,
+    width: 150,
+  },
+  scrollButtonText: {
+    padding: 20,
+    textAlign: 'center',
   },
 });
 
-export default Home;

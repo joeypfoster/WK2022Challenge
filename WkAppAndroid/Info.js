@@ -10,7 +10,7 @@ var sLocation = 0;
 const Info = ({ route, navigation}) => {
 	
 	function backClick() {
-		console.log(sLocation)
+		// console.log(sLocation)
 		navigation.replace("Search", { scrollLocation: sLocation })
 		return true;
 	}
@@ -41,7 +41,7 @@ const Info = ({ route, navigation}) => {
 	
 
 	let returnInfo = () => {
-		console.log(info)
+		// console.log(info)
 		if (info.length) {
 			return (
 				info.map((item, index) => (

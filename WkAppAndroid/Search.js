@@ -22,7 +22,7 @@ const Search = ({route, navigation}) => {
 	let updateSearch = (search) => {
 		setSearch({ search });
 
-		console.log('Searching for: ' + search)
+		// console.log('Searching for: ' + search)
 		
 		
 		if (search.length > 0 && search != "") {
@@ -44,7 +44,7 @@ const Search = ({route, navigation}) => {
 
 	//  console.log(scrollLocation)
 	if (scrollLocation && scrollLocation > 0) {
-		console.log('Scrolling to: ' + Math.floor(scrollLocation))
+		// console.log('Scrolling to: ' + Math.floor(scrollLocation))
 
 		scrollViewRef.current?.scrollTo({y: scrollLocation}); 
 	}
@@ -52,7 +52,7 @@ const Search = ({route, navigation}) => {
 
 	// Redirect to Info page with match id
 	let showMatch = (id) => {
-		console.log('Showing match: ' + id)
+		// console.log('Showing match: ' + id)
 		navigation.replace("Info", { id: id });
 	}
 
